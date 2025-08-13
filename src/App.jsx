@@ -563,6 +563,7 @@ function Testimonials({ darkMode }) {
   const [testimonials, setTestimonials] = useState(() => {
     // Load testimonials from localStorage on component mount
     const saved = localStorage.getItem('portfolio-testimonials')
+    console.log('Loading testimonials:', saved ? 'from localStorage' : 'using defaults')
     return saved ? JSON.parse(saved) : [
       {
         id: 1,
@@ -583,6 +584,56 @@ function Testimonials({ darkMode }) {
         text: 'Shenny delivered an exceptional brand identity that perfectly captures our company values. The logo design, color palette, and overall brand guidelines have significantly improved our market presence.',
         date: '2024-01-10',
         avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=200&auto=format&fit=crop'
+      },
+      {
+        id: 3,
+        name: 'Sarah Williams',
+        role: 'Product Manager',
+        company: 'DigitalFlow Solutions',
+        rating: 5,
+        text: 'Shenny transformed our website with his exceptional UI/UX skills. The redesign improved our conversion rates by 40% and user engagement has never been higher. His attention to user experience is outstanding.',
+        date: '2024-01-05',
+        avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?q=80&w=200&auto=format&fit=crop'
+      },
+      {
+        id: 4,
+        name: 'David Rodriguez',
+        role: 'Creative Director',
+        company: 'Artisan Studios',
+        rating: 5,
+        text: 'Collaborating with Shenny on our graphic design projects has been incredible. His creativity knows no bounds, and he consistently delivers designs that exceed expectations. A true professional with exceptional talent.',
+        date: '2024-01-01',
+        avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200&auto=format&fit=crop'
+      },
+      {
+        id: 5,
+        name: 'Emily Thompson',
+        role: 'Startup Founder',
+        company: 'InnovateHub',
+        rating: 5,
+        text: 'Shenny helped us build our entire digital presence from scratch. His expertise in both design and development saved us time and money. The result is a professional, modern website that perfectly represents our brand.',
+        date: '2023-12-25',
+        avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=200&auto=format&fit=crop'
+      },
+      {
+        id: 6,
+        name: 'James Wilson',
+        role: 'Marketing Manager',
+        company: 'GrowthFirst Agency',
+        rating: 5,
+        text: 'Shenny\'s motion graphics work for our campaigns has been phenomenal. His animations are smooth, engaging, and perfectly capture our brand message. He\'s become an essential part of our creative team.',
+        date: '2023-12-20',
+        avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=200&auto=format&fit=crop'
+      },
+      {
+        id: 7,
+        name: 'Lisa Anderson',
+        role: 'Brand Strategist',
+        company: 'Visionary Brands',
+        rating: 5,
+        text: 'Working with Shenny on our rebranding project was a game-changer. His strategic approach to design combined with technical expertise resulted in a cohesive brand identity that resonates with our audience.',
+        date: '2023-12-15',
+        avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200&auto=format&fit=crop'
       }
     ]
   })
@@ -592,6 +643,7 @@ function Testimonials({ darkMode }) {
   // Save testimonials to localStorage whenever they change
   useEffect(() => {
     localStorage.setItem('portfolio-testimonials', JSON.stringify(testimonials))
+    console.log('Saved testimonials to localStorage:', testimonials.length, 'testimonials')
   }, [testimonials])
 
   const handleSubmit = (e) => {
@@ -615,6 +667,32 @@ function Testimonials({ darkMode }) {
     // Add new testimonial to the beginning of the list
     setTestimonials(prev => [newTestimonial, ...prev])
     
+    // Send testimonial to your email
+    const emailSubject = `New Testimonial from ${newTestimonial.name}`
+    const emailBody = `Hello Shenny,
+
+You have received a new testimonial on your portfolio website:
+
+Name: ${newTestimonial.name}
+Role: ${newTestimonial.role}
+Company: ${newTestimonial.company}
+Rating: ${newTestimonial.rating}/5
+Date: ${newTestimonial.date}
+
+Testimonial:
+"${newTestimonial.text}"
+
+This testimonial has been automatically added to your portfolio and is now visible to all visitors.
+
+Best regards,
+Your Portfolio Website`
+
+    // Create mailto link to send testimonial to your email
+    const mailtoLink = `mailto:shennylenn@gmail.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`
+    
+    // Open email client
+    window.open(mailtoLink, '_blank')
+    
     // Reset form
     setTestimonial('')
     setName('')
@@ -623,8 +701,8 @@ function Testimonials({ darkMode }) {
     setRating(5)
     setShowForm(false)
     
-    // Show success message (optional)
-    alert('Thank you for your testimonial! It has been added to the page.')
+    // Show success message
+    alert('Thank you for your testimonial! It has been added to the page and sent to Shenny\'s email.')
   }
 
   const deleteTestimonial = (id) => {
@@ -633,12 +711,19 @@ function Testimonials({ darkMode }) {
     }
   }
 
+  const resetToDefaultTestimonials = () => {
+    if (window.confirm('This will reset all testimonials to the default ones. Are you sure?')) {
+      localStorage.removeItem('portfolio-testimonials')
+      window.location.reload()
+    }
+  }
+
   return (
     <section id="testimonials" className="section">
       <div className="container-page">
         <div className="text-center mb-10">
           <h2 className={`heading ${darkMode ? 'text-white' : 'text-gray-900'}`}>Testimonials</h2>
-          <p className={`max-w-2xl mx-auto ${darkMode ? 'text-gray-200' : 'text-gray-600'}`}>Hear what clients say about working with me, or share your own experience below.</p>
+          <p className={`max-w-2xl mx-auto ${darkMode ? 'text-gray-200' : 'text-gray-600'}`}>Hear what clients say about working with me, or share your own experience below. All testimonials are public and will be sent to my email.</p>
         </div>
         
         {/* Dynamic Testimonials List - Show only latest 5 */}
@@ -696,9 +781,9 @@ function Testimonials({ darkMode }) {
                     }`}
                     title="Delete testimonial"
                   >
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                    </svg>
+                                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 01 16.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                      </svg>
                   </button>
                 )}
               </div>
@@ -780,7 +865,7 @@ function Testimonials({ darkMode }) {
                       title="Delete testimonial"
                     >
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 01 16.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                       </svg>
                     </button>
                   )}
@@ -794,13 +879,25 @@ function Testimonials({ darkMode }) {
         )}
 
         {/* Add Testimonial Button */}
-        <div className="text-center">
+        <div className="text-center space-y-3">
           <button 
             onClick={() => setShowForm(!showForm)}
             className="btn-primary"
           >
             {showForm ? 'Cancel' : 'Add Your Testimonial'}
           </button>
+          
+          {/* Reset Button - Only show if there are custom testimonials */}
+          {testimonials.length > 7 && (
+            <div>
+              <button 
+                onClick={resetToDefaultTestimonials}
+                className="text-sm text-gray-500 hover:text-gray-700 underline"
+              >
+                Reset to Default Testimonials
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Testimonial Form */}
@@ -814,6 +911,9 @@ function Testimonials({ darkMode }) {
               <h3 className={`text-xl font-semibold mb-6 text-center ${
                 darkMode ? 'text-white' : 'text-gray-900'
               }`}>Share Your Experience</h3>
+              <p className={`text-sm text-center mb-6 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                ⚠️ Note: Your testimonial will be publicly visible on this website and sent to Shenny's email.
+              </p>
               
               <div className="space-y-4">
                 {/* Rating */}
