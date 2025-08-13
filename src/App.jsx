@@ -252,8 +252,9 @@ function Services({ darkMode }) {
 
 function Projects({ darkMode }) {
   const [activeCategory, setActiveCategory] = useState('All')
-  const [isHovered, setIsHovered] = useState(false)
   const [selectedProject, setSelectedProject] = useState(null)
+  const [isUserInteracting, setIsUserInteracting] = useState(false)
+  const [autoScrollActive, setAutoScrollActive] = useState(true)
   const scrollRef = useRef(null)
   
   const categories = ['All', 'UI/UX', 'Web & app', 'Brand design', 'Graphic Design']
@@ -328,16 +329,16 @@ function Projects({ darkMode }) {
   
   const filteredCards = activeCategory === 'All' ? allCards : allCards.filter(card => card.cat === activeCategory)
   
-  // Auto-scrolling effect
+  // Smart auto-scroll system
   useEffect(() => {
-    if (!scrollRef.current || isHovered) return
+    if (!scrollRef.current || !autoScrollActive || isUserInteracting) return
     
     const scrollContainer = scrollRef.current
     let scrollPosition = 0
-    const scrollSpeed = 1
+    const scrollSpeed = 0.5 // Slower for better UX
     
-    const scroll = () => {
-      if (isHovered) return
+    const autoScroll = () => {
+      if (!autoScrollActive || isUserInteracting) return
       
       scrollPosition += scrollSpeed
       if (scrollPosition >= scrollContainer.scrollWidth - scrollContainer.clientWidth) {
@@ -346,19 +347,39 @@ function Projects({ darkMode }) {
       scrollContainer.scrollLeft = scrollPosition
     }
     
-    const interval = setInterval(scroll, 50)
+    const interval = setInterval(autoScroll, 50)
     return () => clearInterval(interval)
-  }, [isHovered])
+  }, [autoScrollActive, isUserInteracting])
+  
+  // Handle user interaction to pause auto-scroll
+  const handleUserInteraction = () => {
+    setIsUserInteracting(true)
+    setAutoScrollActive(false)
+    
+    // Resume auto-scroll after 3 seconds of no interaction
+    setTimeout(() => {
+      setIsUserInteracting(false)
+      setAutoScrollActive(true)
+    }, 3000)
+  }
+  
+
 
   const scrollLeft = () => {
     if (scrollRef.current) {
-      scrollRef.current.scrollLeft -= 300
+      const container = scrollRef.current
+      const scrollAmount = Math.min(300, container.clientWidth * 0.8)
+      container.scrollLeft -= scrollAmount
+      handleUserInteraction() // Pause auto-scroll
     }
   }
 
   const scrollRight = () => {
     if (scrollRef.current) {
-      scrollRef.current.scrollLeft += 300
+      const container = scrollRef.current
+      const scrollAmount = Math.min(300, container.clientWidth * 0.8)
+      container.scrollLeft += scrollAmount
+      handleUserInteraction() // Pause auto-scroll
     }
   }
   
@@ -385,30 +406,62 @@ function Projects({ darkMode }) {
           ))}
         </div>
         
-        {/* Manual Navigation Controls - Hidden on mobile for better touch experience */}
-        <div className="hidden md:flex items-center justify-center gap-4 mb-6">
-          <button 
-            onClick={scrollLeft}
-            className="p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
-            aria-label="Scroll left"
-          >
-            ←
-          </button>
-          <button 
-            onClick={scrollRight}
-            className="p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
-            aria-label="Scroll right"
-          >
-            →
-          </button>
+        {/* Manual Navigation Controls - Always visible for better UX */}
+        <div className="flex flex-col items-center gap-3 mb-6">
+          {/* Navigation Controls */}
+          <div className="flex items-center gap-4">
+            <button 
+              onClick={scrollLeft}
+              className="p-3 rounded-full bg-gray-100 hover:bg-gray-200 active:bg-gray-300 transition-colors shadow-sm"
+              aria-label="Scroll left"
+            >
+              ←
+            </button>
+            <button 
+              onClick={scrollRight}
+              className="p-3 rounded-full bg-gray-100 hover:bg-gray-200 active:bg-gray-300 transition-colors shadow-sm"
+              aria-label="Scroll right"
+            >
+              →
+            </button>
+          </div>
+          
+          {/* Mobile Instructions */}
+          <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'} text-center`}>
+            💡 Swipe left/right or use arrows to navigate projects
+          </p>
+          
+          {/* Auto-scroll Status and Toggle */}
+          <div className={`flex items-center gap-3 text-xs ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>
+            <div className={`w-2 h-2 rounded-full ${autoScrollActive ? 'bg-green-400' : 'bg-yellow-400'}`}></div>
+            <span>{autoScrollActive ? 'Auto-scroll active' : 'Auto-scroll paused'}</span>
+            <button
+              onClick={() => {
+                setAutoScrollActive(!autoScrollActive)
+                setIsUserInteracting(false)
+              }}
+              className={`px-2 py-1 rounded text-xs transition-colors ${
+                autoScrollActive 
+                  ? 'bg-red-100 text-red-700 hover:bg-red-200' 
+                  : 'bg-green-100 text-green-700 hover:bg-green-200'
+              }`}
+            >
+              {autoScrollActive ? 'Pause' : 'Resume'}
+            </button>
+          </div>
         </div>
 
         <div 
           ref={scrollRef}
           className="overflow-x-auto touch-pan-x"
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
-          style={{ scrollBehavior: 'smooth' }}
+          style={{ 
+            scrollBehavior: 'smooth',
+            scrollbarWidth: 'none', /* Firefox */
+            msOverflowStyle: 'none' /* IE and Edge */
+          }}
+          onTouchStart={handleUserInteraction}
+          onMouseDown={handleUserInteraction}
+          onWheel={handleUserInteraction}
         >
           <div className="flex gap-6 min-w-max">
             {filteredCards.map((card) => (
