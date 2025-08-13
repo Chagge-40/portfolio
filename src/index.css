@@ -1,0 +1,42 @@
+@import "tailwindcss";
+
+/* App theme tokens */
+:root {
+  --brand: #f97316; /* orange-500 */
+}
+
+/* Utilities specific to this project */
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center rounded-full bg-orange-500 px-5 py-2.5 text-white shadow hover:bg-orange-600 transition;
+  }
+
+  .section {
+    @apply py-16 md:py-24;
+  }
+
+  .container-page {
+    @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+
+  .heading {
+    @apply text-3xl md:text-4xl font-extrabold tracking-tight text-gray-900;
+  }
+
+  .subtext {
+  @apply text-gray-600;
+}
+
+/* Purple hover effects */
+.hover\:text-purple-500:hover {
+  color: #8b5cf6;
+}
+
+.hover\:text-purple-600:hover {
+  color: #7c3aed;
+}
+
+.hover\:text-purple-700:hover {
+  color: #6d28d9;
+}
+}
