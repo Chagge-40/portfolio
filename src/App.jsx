@@ -360,7 +360,7 @@ function Projects({ darkMode }) {
       <div className="container-page">
         <div className="text-center mb-10">
           <h2 className={`heading ${darkMode ? 'text-white' : 'text-gray-900'}`}>My Projects</h2>
-          <p className={`max-w-xl mx-auto mt-3 ${darkMode ? 'text-gray-200' : 'text-gray-600'}`}>Lorem ipsum dolor sit amet consectetur. Mollis erat duis aliquam mauris est risus lectus.</p>
+          <p className={`max-w-xl mx-auto mt-3 ${darkMode ? 'text-gray-200' : 'text-gray-600'}`}>Providing creative and technical solutions to help businesses and individuals build, design, and grow their digital presence</p>
         </div>
         <div className="flex flex-wrap items-center justify-center gap-2 mb-8">
           {categories.map((category) => (
@@ -570,7 +570,7 @@ function Testimonials({ darkMode }) {
         role: 'CEO',
         company: 'TechStart Mobile',
         rating: 5,
-        text: 'Working with Shenny was an absolute pleasure. Her attention to detail and creative vision brought our mobile app design to life in ways we never imagined. The user experience is intuitive and the visual design is stunning.',
+        text: 'Working with Shenny was an absolute pleasure. His attention to detail and creative vision brought our mobile app design to life in ways we never imagined. The user experience is intuitive and the visual design is stunning.',
         date: '2024-01-15',
         avatar: 'https://images.unsplash.com/photo-1502685104226-ee32379fefbe?q=80&w=200&auto=format&fit=crop'
       },
@@ -1021,7 +1021,7 @@ function Footer({ darkMode }) {
         </div>
         <p className={`mt-6 text-xs transition-colors ${
           darkMode ? 'text-gray-400' : 'text-gray-500'
-        }`}>© 2023 CHAE digital creative All Rights Reserved.</p>
+        }`}>© 2025 CHAE digital creative All Rights Reserved.</p>
       </div>
     </footer>
   )
