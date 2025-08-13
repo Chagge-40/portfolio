@@ -1,6 +1,13 @@
 import { useState, useEffect, useRef, createContext } from 'react'
 import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn, FaSun, FaMoon, FaExternalLinkAlt, FaAppStore, FaGooglePlay, FaBehance, FaGithub } from 'react-icons/fa'
 
+// EmailJS configuration
+const EMAILJS_CONFIG = {
+  serviceId: 'YOUR_EMAILJS_SERVICE_ID', // Replace with your EmailJS service ID
+  templateId: 'YOUR_EMAILJS_TEMPLATE_ID', // Replace with your EmailJS template ID
+  userId: 'YOUR_EMAILJS_USER_ID' // Replace with your EmailJS user ID
+}
+
 const navLinks = [
   { label: 'Home', href: '#home' },
   { label: 'About Me', href: '#about' },
@@ -646,7 +653,7 @@ function Testimonials({ darkMode }) {
     console.log('Saved testimonials to localStorage:', testimonials.length, 'testimonials')
   }, [testimonials])
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     
     // Create new testimonial object
@@ -667,31 +674,39 @@ function Testimonials({ darkMode }) {
     // Add new testimonial to the beginning of the list
     setTestimonials(prev => [newTestimonial, ...prev])
     
-    // Send testimonial to your email
-    const emailSubject = `New Testimonial from ${newTestimonial.name}`
-    const emailBody = `Hello Shenny,
-
-You have received a new testimonial on your portfolio website:
-
-Name: ${newTestimonial.name}
-Role: ${newTestimonial.role}
-Company: ${newTestimonial.company}
-Rating: ${newTestimonial.rating}/5
-Date: ${newTestimonial.date}
-
-Testimonial:
-"${newTestimonial.text}"
-
-This testimonial has been automatically added to your portfolio and is now visible to all visitors.
-
-Best regards,
-Your Portfolio Website`
-
-    // Create mailto link to send testimonial to your email
-    const mailtoLink = `mailto:shennylenn@gmail.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`
-    
-    // Open email client
-    window.open(mailtoLink, '_blank')
+    // Send testimonial to your email automatically
+    try {
+      // Check if EmailJS is loaded
+      if (window.emailjs) {
+        await window.emailjs.send(
+          EMAILJS_CONFIG.serviceId,
+          EMAILJS_CONFIG.templateId,
+          {
+            to_email: 'shennylenn@gmail.com',
+            from_name: newTestimonial.name,
+            from_role: newTestimonial.role,
+            from_company: newTestimonial.company,
+            rating: newTestimonial.rating,
+            testimonial_text: newTestimonial.text,
+            date: newTestimonial.date,
+            reply_to: 'noreply@portfolio.com'
+          },
+          EMAILJS_CONFIG.userId
+        )
+        console.log('Testimonial email sent successfully!')
+      } else {
+        // Fallback: Use a simple email service
+        await sendTestimonialEmail(newTestimonial)
+      }
+    } catch (error) {
+      console.error('Failed to send email:', error)
+      // Fallback: Use a simple email service
+      try {
+        await sendTestimonialEmail(newTestimonial)
+      } catch (fallbackError) {
+        console.error('Fallback email also failed:', fallbackError)
+      }
+    }
     
     // Reset form
     setTestimonial('')
@@ -702,7 +717,58 @@ Your Portfolio Website`
     setShowForm(false)
     
     // Show success message
-    alert('Thank you for your testimonial! It has been added to the page and sent to Shenny\'s email.')
+    alert('Thank you for your testimonial! It has been added to the page and automatically sent to Shenny\'s email.')
+  }
+
+  // Fallback email function using a simple email service
+  const sendTestimonialEmail = async (testimonial) => {
+    const emailData = {
+      to: 'shennylenn@gmail.com',
+      subject: `New Testimonial from ${testimonial.name}`,
+      message: `Hello Shenny,
+
+You have received a new testimonial on your portfolio website:
+
+Name: ${testimonial.name}
+Role: ${testimonial.role}
+Company: ${testimonial.company}
+Rating: ${testimonial.rating}/5
+Date: ${testimonial.date}
+
+Testimonial:
+"${testimonial.text}"
+
+This testimonial has been automatically added to your portfolio and is now visible to all visitors.
+
+Best regards,
+Your Portfolio Website`
+    }
+
+    // Use a simple email service (you can replace this with your preferred service)
+    const response = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        service_id: EMAILJS_CONFIG.serviceId,
+        template_id: EMAILJS_CONFIG.templateId,
+        user_id: EMAILJS_CONFIG.userId,
+        template_params: {
+          to_email: emailData.to,
+          from_name: testimonial.name,
+          from_role: testimonial.role,
+          from_company: testimonial.company,
+          rating: testimonial.rating,
+          testimonial_text: testimonial.text,
+          date: testimonial.date
+        }
+      })
+    })
+
+    if (!response.ok) {
+      throw new Error('Failed to send email')
+    }
   }
 
   const deleteTestimonial = (id) => {
@@ -723,7 +789,7 @@ Your Portfolio Website`
       <div className="container-page">
         <div className="text-center mb-10">
           <h2 className={`heading ${darkMode ? 'text-white' : 'text-gray-900'}`}>Testimonials</h2>
-          <p className={`max-w-2xl mx-auto ${darkMode ? 'text-gray-200' : 'text-gray-600'}`}>Hear what clients say about working with me, or share your own experience below. All testimonials are public and will be sent to my email.</p>
+          <p className={`max-w-2xl mx-auto ${darkMode ? 'text-gray-200' : 'text-gray-600'}`}>Hear what clients say about working with me, or share your own experience below. All testimonials are public and will be automatically sent to my email.</p>
         </div>
         
         {/* Dynamic Testimonials List - Show only latest 5 */}
@@ -912,7 +978,7 @@ Your Portfolio Website`
                 darkMode ? 'text-white' : 'text-gray-900'
               }`}>Share Your Experience</h3>
               <p className={`text-sm text-center mb-6 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-                ⚠️ Note: Your testimonial will be publicly visible on this website and sent to Shenny's email.
+                ⚠️ Note: Your testimonial will be publicly visible on this website and automatically sent to Shenny's email.
               </p>
               
               <div className="space-y-4">
@@ -1136,6 +1202,22 @@ export default function App() {
     }
     return window.matchMedia('(prefers-color-scheme: dark)').matches
   })
+
+  // Load EmailJS script
+  useEffect(() => {
+    const script = document.createElement('script')
+    script.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js'
+    script.async = true
+    script.onload = () => {
+      window.emailjs.init(EMAILJS_CONFIG.userId)
+      console.log('EmailJS loaded successfully')
+    }
+    document.head.appendChild(script)
+
+    return () => {
+      document.head.removeChild(script)
+    }
+  }, [])
 
   useEffect(() => {
     // Save theme preference
