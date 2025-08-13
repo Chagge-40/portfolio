@@ -566,7 +566,7 @@ function Testimonials({ darkMode }) {
     return saved ? JSON.parse(saved) : [
       {
         id: 1,
-        name: 'Sarah Johnson',
+        name: 'Timoth Johnson',
         role: 'CEO',
         company: 'TechStart Mobile',
         rating: 5,
