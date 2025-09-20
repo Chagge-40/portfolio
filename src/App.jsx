@@ -40,8 +40,8 @@ function Navbar({ darkMode, toggleDarkMode }) {
         : 'bg-white/80 border-gray-100'
     }`}>
       <div className="container-page flex items-center justify-between h-16">
-        <a href="#home" className="flex items-center gap-2 font-black text-2xl tracking-tight">
-          <img src="/images/logo.png" alt="CHAE Logo" className="h-35 w-auto" />
+        <a href="#home" className="flex items-center">
+          <img src="/images/logo.png" alt="CHAE Logo" className="h-12 w-auto" />
         </a>
         <nav className="hidden md:flex items-center gap-8 text-sm font-medium transition-colors">
           {navLinks.map((n) => (
@@ -257,73 +257,139 @@ function Projects({ darkMode }) {
   const [autoScrollActive, setAutoScrollActive] = useState(true)
   const scrollRef = useRef(null)
   
-  const categories = ['All', 'UI/UX', 'Web & app', 'Brand design', 'Graphic Design']
+  const categories = ['All', 'Graphic Design', 'Brand design', 'UI/UX']
   const allCards = [
     { 
-      img: 'https://images.unsplash.com/photo-1542751110-97427bbecf20?q=80&w=800&auto=format&fit=crop', 
-      cat: 'Web & app', 
-      title: 'AirCalling Landing Page Design',
-      description: 'A modern, responsive landing page for AirCalling, a cloud-based calling platform. Features include user authentication, call management dashboard, and seamless mobile experience.',
-      technologies: ['React', 'Tailwind CSS', 'Node.js', 'MongoDB'],
-      duration: '3 weeks',
-      client: 'AirCalling Inc.',
-      website: 'https://aircalling.com',
-      type: 'website'
-    },
-    { 
-      img: 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?q=80&w=800&auto=format&fit=crop', 
-      cat: 'Web & app', 
-      title: 'Business Landing Page Design',
-      description: 'Professional business website with lead generation forms, service showcases, and integrated analytics. Optimized for conversion and user engagement.',
-      technologies: ['HTML5', 'CSS3', 'JavaScript', 'PHP'],
-      duration: '2 weeks',
-      client: 'Business Solutions Ltd.',
-      website: 'https://businesssolutions.com',
-      type: 'website'
-    },
-    { 
-      img: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=800&auto=format&fit=crop', 
-      cat: 'Web & app', 
-      title: 'Ecom Web Page Design',
-      description: 'Full-featured e-commerce platform with shopping cart, payment integration, product catalog, and admin dashboard. Mobile-first responsive design.',
-      technologies: ['React', 'Redux', 'Stripe API', 'Firebase'],
-      duration: '6 weeks',
-      client: 'ShopEasy Online',
-      website: 'https://shopeasy.com',
-      type: 'website'
-    },
-    { 
-      img: 'https://images.unsplash.com/photo-1547658719-4f171f25ec3c?q=80&w=800&auto=format&fit=crop', 
-      cat: 'UI/UX', 
-      title: 'Mobile App Design',
-      description: 'Intuitive mobile app design focusing on user experience and accessibility. Includes wireframes, prototypes, and user testing results.',
-      technologies: ['Figma', 'Adobe XD', 'InVision', 'User Research'],
-      duration: '4 weeks',
-      client: 'TechStart Mobile',
-      type: 'design',
-      behance: 'https://behance.net/gallery/11223344/Mobile-App-Design-TechStart'
-    },
-    { 
-      img: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?q=80&w=800&auto=format&fit=crop', 
-      cat: 'Brand design', 
-      title: 'Brand Identity Design',
-      description: 'Complete brand identity package including logo design, color palette, typography, and brand guidelines. Applied across all marketing materials.',
-      technologies: ['Adobe Illustrator', 'Adobe Photoshop', 'Brand Strategy'],
-      duration: '5 weeks',
-      client: 'InnovateCorp',
-      type: 'design',
-      behance: 'https://behance.net/gallery/12345678/Brand-Identity-Design-InnovateCorp'
-    },
-    { 
-      img: 'https://images.unsplash.com/photo-1626785774573-4b79921d5c4c?q=80&w=800&auto=format&fit=crop', 
+      img: '/images/graphics_designs/ACTIVE FRIDAY.png', 
       cat: 'Graphic Design', 
-      title: 'Marketing Materials',
-      description: 'Comprehensive marketing collateral including brochures, social media graphics, email templates, and print advertisements.',
-      technologies: ['Adobe Creative Suite', 'Canva Pro', 'Print Design'],
-      duration: '3 weeks',
-      client: 'Marketing Pro Agency',
+      title: 'Active Friday Campaign',
+      description: 'Dynamic social media campaign design for Active Friday promotion. Features vibrant colors, engaging typography, and mobile-optimized graphics for maximum social media impact.',
+      technologies: ['Adobe Photoshop', 'Adobe Illustrator', 'Social Media Design'],
+      duration: '1 week',
+      client: 'Active Friday Brand',
       type: 'design',
-      behance: 'https://behance.net/gallery/87654321/Marketing-Materials-Collection'
+      behance: 'https://www.behance.net/shennylenn'
+    },
+    { 
+      img: '/images/graphics_designs/AZIZ KI.png', 
+      cat: 'Graphic Design', 
+      title: 'Aziz Ki Brand Design',
+      description: 'Complete brand identity design for Aziz Ki, featuring modern logo design, color palette, and brand guidelines. Applied across digital and print materials.',
+      technologies: ['Adobe Illustrator', 'Brand Strategy', 'Logo Design'],
+      duration: '2 weeks',
+      client: 'Aziz Ki',
+      type: 'design',
+      behance: 'https://www.behance.net/shennylenn'
+    },
+    { 
+      img: '/images/graphics_designs/clickpoint.png', 
+      cat: 'Graphic Design', 
+      title: 'ClickPoint Digital Design',
+      description: 'Modern digital interface design for ClickPoint platform. Features clean UI elements, intuitive navigation, and responsive design principles.',
+      technologies: ['Figma', 'UI/UX Design', 'Digital Interface'],
+      duration: '3 weeks',
+      client: 'ClickPoint Digital',
+      type: 'design',
+      behance: 'https://www.behance.net/shennylenn'
+    },
+    { 
+      img: '/images/graphics_designs/derby 1.png', 
+      cat: 'Graphic Design', 
+      title: 'Derby Sports Event Design',
+      description: 'High-energy sports event poster design featuring dynamic typography and bold visual elements. Created for major sporting event promotion.',
+      technologies: ['Adobe Photoshop', 'Event Design', 'Typography'],
+      duration: '1 week',
+      client: 'Sports Event Organizer',
+      type: 'design',
+      behance: 'https://www.behance.net/shennylenn'
+    },
+    { 
+      img: '/images/graphics_designs/farmer day.jpg', 
+      cat: 'Graphic Design', 
+      title: 'Farmer Day Celebration',
+      description: 'Agricultural celebration poster design highlighting farming community and sustainable practices. Features warm colors and community-focused messaging.',
+      technologies: ['Adobe Creative Suite', 'Event Design', 'Community Outreach'],
+      duration: '1 week',
+      client: 'Agricultural Community',
+      type: 'design',
+      behance: 'https://www.behance.net/shennylenn'
+    },
+    { 
+      img: '/images/graphics_designs/FLYER 1.png', 
+      cat: 'Graphic Design', 
+      title: 'Event Flyer Design',
+      description: 'Professional event flyer design with clear information hierarchy and eye-catching visuals. Optimized for both digital and print distribution.',
+      technologies: ['Adobe InDesign', 'Print Design', 'Event Marketing'],
+      duration: '3 days',
+      client: 'Event Organizer',
+      type: 'design',
+      behance: 'https://www.behance.net/shennylenn'
+    },
+    { 
+      img: '/images/graphics_designs/matchday - simba vs berkane 1st leg.png', 
+      cat: 'Graphic Design', 
+      title: 'Simba vs Berkane Matchday',
+      description: 'Exciting football match poster design for Simba vs Berkane first leg. Features team colors, dynamic layout, and engaging typography for maximum fan excitement.',
+      technologies: ['Adobe Photoshop', 'Sports Design', 'Event Promotion'],
+      duration: '2 days',
+      client: 'Football Club',
+      type: 'design',
+      behance: 'https://www.behance.net/shennylenn'
+    },
+    { 
+      img: '/images/graphics_designs/SHAROBARO BRANDS.jpg', 
+      cat: 'Brand design', 
+      title: 'Sharobaro Brands Identity',
+      description: 'Complete brand identity package for Sharobaro Brands including logo design, brand guidelines, and marketing materials. Features modern African-inspired design elements.',
+      technologies: ['Adobe Illustrator', 'Brand Strategy', 'Logo Design'],
+      duration: '4 weeks',
+      client: 'Sharobaro Brands',
+      type: 'design',
+      behance: 'https://www.behance.net/shennylenn'
+    },
+    { 
+      img: '/images/graphics_designs/singida RGB.png', 
+      cat: 'Graphic Design', 
+      title: 'Singida RGB Design',
+      description: 'Colorful RGB-themed design project for Singida brand. Features vibrant color schemes and modern design principles for digital applications.',
+      technologies: ['Adobe Creative Suite', 'Color Theory', 'Digital Design'],
+      duration: '1 week',
+      client: 'Singida Brand',
+      type: 'design',
+      behance: 'https://www.behance.net/shennylenn'
+    },
+    { 
+      img: '/brand_design/elvado ppt/Artboard 1.jpg', 
+      cat: 'Brand design', 
+      title: 'Elvado Brand Presentation',
+      description: 'Comprehensive brand presentation for Elvado featuring multiple artboards showcasing brand identity, logo variations, color palettes, and application guidelines.',
+      technologies: ['Adobe Illustrator', 'Presentation Design', 'Brand Guidelines'],
+      duration: '3 weeks',
+      client: 'Elvado Brand',
+      type: 'design',
+      behance: 'https://www.behance.net/shennylenn'
+    },
+    { 
+      img: '/UI/UX/home.png', 
+      cat: 'UI/UX', 
+      title: 'Bus App UX Design',
+      description: 'Complete UX design for public transportation app including user research, wireframes, prototypes, and user testing. Focus on accessibility and ease of use.',
+      technologies: ['Figma', 'User Research', 'Prototyping', 'UX Design'],
+      duration: '6 weeks',
+      client: 'Transportation Authority',
+      type: 'design',
+      behance: 'https://www.behance.net/shennylenn'
+    },
+    { 
+      img: '/images/graphics_designs/TISEZA LOGO AND SLOGAN-.pdf.pdf', 
+      cat: 'Brand design', 
+      title: 'Tiseza Logo & Slogan',
+      description: 'Professional logo design and slogan creation for Tiseza brand. Features clean typography, memorable iconography, and comprehensive brand guidelines.',
+      technologies: ['Adobe Illustrator', 'Logo Design', 'Brand Strategy'],
+      duration: '2 weeks',
+      client: 'Tiseza Brand',
+      type: 'design',
+      behance: 'https://www.behance.net/shennylenn'
     },
   ]
   
@@ -1202,8 +1268,8 @@ function Footer({ darkMode }) {
       darkMode ? 'border-gray-700' : 'border-gray-200'
     }`}>
       <div className="container-page text-center">
-        <div className="flex items-center justify-center gap-2 font-black text-2xl">
-          <img src="/images/logo.png" alt="CHAE Logo" className="h-20 w-auto" />
+        <div className="flex items-center justify-center">
+          <img src="/images/logo.png" alt="CHAE Logo" className="h-16 w-auto" />
         </div>
         <nav className="mt-6 flex flex-wrap items-center justify-center gap-6 text-sm transition-colors">
           {navLinks.map((n) => (
